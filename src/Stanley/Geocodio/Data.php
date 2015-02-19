@@ -6,7 +6,7 @@ class Data
      * Response Body
      * @var object
      */
-    public $response = [];
+    public $response = array();
 
     /**
      * Class Constructor

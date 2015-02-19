@@ -49,7 +49,7 @@ class Client
      * @param  string $key  API Key
      * @return mixed
      */
-    public function geocode($data, $fields = [], $key = null)
+    public function geocode($data, $fields = array(), $key = null)
     {
         if ($key) $this->apiKey = $key;
         return (is_string($data)) ? $this->get($data, $fields) : $this->post($data, $fields);
@@ -61,7 +61,7 @@ class Client
      * @param  string $verb URL segment to call - either 'geocode' or 'parse'
      * @return Stanley\Geocodio\Data
      */
-    public function get($data, $fields = [], $key = null, $verb = 'geocode')
+    public function get($data, $fields = array(), $key = null, $verb = 'geocode')
     {
         if ($key) $this->apiKey = $key;
         $request = $this->getRequest($data, $fields, $verb);
@@ -74,7 +74,7 @@ class Client
      * @param  array $data Data to be encoded
      * @return Stanley\Geocodio\Data
      */
-    public function post($data, $fields = [], $key = null)
+    public function post($data, $fields = array(), $key = null)
     {
         if ($key) $this->apiKey = $key;
         $request = $this->bulkPost($data, $fields);
@@ -90,7 +90,7 @@ class Client
     public function parse($data, $key = null)
     {
         if ($key) $this->apiKey = $key;
-        return $this->get($data, [], null, 'parse');
+        return $this->get($data, array(), null, 'parse');
     }
 
     /**
@@ -100,7 +100,7 @@ class Client
      * @param  string $key  API Key
      * @return Stanley\Geocodio\Data
      */
-    public function reverse($data, $fields = [], $key = null)
+    public function reverse($data, $fields = array(), $key = null)
     {
         return (is_string($data)) ? $this->get($data, $fields, $key, 'reverse') : $this->post($data, $fields, $key, 'reverse');
     }
@@ -114,14 +114,14 @@ class Client
      */
     protected function getRequest($data, $fields, $verb)
     {
-        $params = [
+        $params = array(
             'q' => $data,
             'api_key' => $this->apiKey,
             'fields' => implode(',', $fields)
-        ];
-        $request = $this->client->get(self::BASE_URL . $verb, [], [
+        );
+        $request = $this->client->get(self::BASE_URL . $verb, array(), array(
             'query' => $params
-        ]);
+        ));
         $response = $this->client->send($request);
         return $this->checkResponse($response);
     }
@@ -136,10 +136,10 @@ class Client
     protected function bulkPost($data, $fields, $verb = 'geocode')
     {
         $url = self::BASE_URL . $verb . "?fields=" . implode(',', $fields) . "&api_key=" . $this->apiKey;
-        $headers = [ 'Content-Type' => 'application/json' ];
+        $headers = array( 'Content-Type' => 'application/json' );
         $payload = json_encode($data);
 
-        $request = $this->client->post($url, $headers, $payload, []);
+        $request = $this->client->post($url, $headers, $payload, array());
         $response = $this->client->send($request);
         return $this->checkResponse($response);
     }
